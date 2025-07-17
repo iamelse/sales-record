@@ -20,23 +20,23 @@ enum PermissionEnum: string
     case DELETE_ROLE = 'roles_delete';
     case UPDATE_ROLE_PERMISSION = 'roles_update_permission';
 
-    // Penjualan
-    case CREATE_PENJUALAN = 'penjualan_create';
-    case READ_PENJUALAN = 'penjualan_read';
-    case UPDATE_PENJUALAN = 'penjualan_update';
-    case DELETE_PENJUALAN = 'penjualan_delete';
+    // Sales
+    case CREATE_SALE = 'sales_create';
+    case READ_SALE = 'sales_read';
+    case UPDATE_SALE = 'sales_update';
+    case DELETE_SALE = 'sales_delete';
 
-    // Pembayaran
-    case CREATE_PEMBAYARAN = 'pembayaran_create';
-    case READ_PEMBAYARAN = 'pembayaran_read';
-    case UPDATE_PEMBAYARAN = 'pembayaran_update';
-    case DELETE_PEMBAYARAN = 'pembayaran_delete';
+    // Payments
+    case CREATE_PAYMENT = 'payments_create';
+    case READ_PAYMENT = 'payments_read';
+    case UPDATE_PAYMENT = 'payments_update';
+    case DELETE_PAYMENT = 'payments_delete';
 
-    // Item
-    case CREATE_ITEM = 'item_create';
-    case READ_ITEM = 'item_read';
-    case UPDATE_ITEM = 'item_update';
-    case DELETE_ITEM = 'item_delete';
+    // Items
+    case CREATE_ITEM = 'items_create';
+    case READ_ITEM = 'items_read';
+    case UPDATE_ITEM = 'items_update';
+    case DELETE_ITEM = 'items_delete';
 
     public static function all(): array
     {

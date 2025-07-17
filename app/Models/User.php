@@ -48,9 +48,9 @@ class User extends Authenticatable
         return 'username';
     }
 
-    public function posts(): HasMany
+    public function sales()
     {
-        return $this->hasMany(Post::class);
+        return $this->hasMany(Sale::class);
     }
 
     /**

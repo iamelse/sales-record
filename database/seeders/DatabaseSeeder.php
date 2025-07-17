@@ -61,5 +61,11 @@ class DatabaseSeeder extends Seeder
 
         // Tambahan dummy users
         User::factory()->count(10)->create();
+
+        $this->call([
+            ItemSeeder::class,
+            SaleSeeder::class,
+            PaymentSeeder::class,
+        ]);
     }
 }

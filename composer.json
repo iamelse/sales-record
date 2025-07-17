@@ -30,6 +30,7 @@
     },
     "autoload": {
         "files": [
+            "app/Helpers/UtilityHelper.php",
             "app/Helpers/ImageHelper.php",
             "app/Helpers/DateHelper.php",
             "app/Helpers/UserHelper.php"

@@ -68,6 +68,14 @@
                             'label' => 'Dashboard',
                             'permission' => PermissionEnum::READ_DASHBOARD
                         ],
+                        [
+                            'order' => 2,
+                            'active' => 'be.item',
+                            'route' => 'be.item.index',
+                            'icon' => 'bx-package',
+                            'label' => 'Item',
+                            'permission' => PermissionEnum::READ_ITEM
+                        ],
                     ]
                 ],
                 [
