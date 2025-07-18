@@ -18,7 +18,7 @@
         @can(PermissionEnum::CREATE_ITEM, $items)
         <a href="{{ route('be.item.create') }}"
             class="flex items-center gap-2 h-[42px] px-4 py-2.5 rounded-lg border border-blue-500 bg-blue-600 text-white font-medium transition-all hover:bg-blue-700 hover:border-blue-600 focus:ring focus:ring-blue-300 dark:bg-blue-700 dark:border-blue-600 dark:hover:bg-blue-800">
-            <i class="bx bx-plus text-lg"></i>
+            <i class='bx bx-filter-alt text-lg' ></i>
             New Item
         </a>
         @endcan

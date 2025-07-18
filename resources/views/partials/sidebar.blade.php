@@ -70,6 +70,14 @@
                         ],
                         [
                             'order' => 2,
+                            'active' => 'be.sale',
+                            'route' => 'be.sale.index',
+                            'icon' => 'bx-wallet',
+                            'label' => 'Sale',
+                            'permission' => PermissionEnum::READ_SALE
+                        ],
+                        [
+                            'order' => 3,
                             'active' => 'be.item',
                             'route' => 'be.item.index',
                             'icon' => 'bx-package',

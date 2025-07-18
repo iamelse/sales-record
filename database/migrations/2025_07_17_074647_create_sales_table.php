@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
+            $table->string('customer_name');
             $table->string('code')->unique();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->decimal('total_price', 15, 2)->default(0);

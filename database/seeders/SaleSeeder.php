@@ -19,36 +19,49 @@ class SaleSeeder extends Seeder
         $user = User::first();
         $items = Item::all();
 
+        if (!$user || $items->isEmpty()) {
+            $this->command->error('User or Items not found. Please seed them first.');
+            return;
+        }
+
         for ($i = 1; $i <= 5; $i++) {
+            // Hitung jumlah sale saat ini dan tambahkan offset $i untuk buat kode unik
+            $saleCount = Sale::count() + $i;
+            $code = 'INV-' . now()->format('Ymd') . '-' . str_pad($saleCount, 3, '0', STR_PAD_LEFT);
+
             $sale = Sale::create([
-                'code' => 'PNJ-' . str_pad($i, 4, '0', STR_PAD_LEFT),
+                'customer_name' => fake()->name(),
+                'code' => $code,
                 'user_id' => $user->id,
                 'status' => 'Belum Dibayar',
-                'total_price' => 0, // akan diupdate
+                'total_price' => 0, // akan dihitung di bawah
             ]);
 
             $total = 0;
 
-            // Masukkan 2-4 item random
-            $saleItems = $items->random(rand(2, 4));
-            foreach ($saleItems as $item) {
+            // Ambil 2–4 item secara acak dari item yang tersedia
+            $randomItems = $items->random(rand(2, 4));
+
+            foreach ($randomItems as $item) {
                 $qty = rand(1, 5);
                 $price = $item->price;
-                $total_price = $qty * $price;
+                $totalPrice = $qty * $price;
 
                 SaleItem::create([
                     'sale_id' => $sale->id,
                     'item_id' => $item->id,
                     'qty' => $qty,
                     'price' => $price,
-                    'total_price' => $total_price,
+                    'total_price' => $totalPrice,
                 ]);
 
-                $total += $total_price;
+                $total += $totalPrice;
             }
 
-            // Update total price sale
+            // Update total_price pada Sale
             $sale->update(['total_price' => $total]);
         }
+
+        $this->command->info('5 penjualan berhasil dibuat.');
     }
 }
