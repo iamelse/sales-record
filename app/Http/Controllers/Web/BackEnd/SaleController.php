@@ -30,13 +30,13 @@ class SaleController extends Controller
         $sales = Sale::search(
             keyword: $request->keyword,
             columns: $allowedFilterFields,
-        )
-            ->when($request->filled(['start_date', 'end_date']), function ($query) use ($request) {
+            )->when($request->filled(['start_date', 'end_date']), function ($query) use ($request) {
                 $query->whereBetween('created_at', [
                     $request->start_date . ' 00:00:00',
                     $request->end_date . ' 23:59:59'
                 ]);
             })
+            ->where('status', '<>', SaleStatus::PAID)
             ->sort(
                 sort_by: $request->sort_by ?? 'created_at',
                 sort_order: $request->sort_order ?? 'DESC'

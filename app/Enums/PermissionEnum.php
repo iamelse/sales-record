@@ -29,7 +29,6 @@ enum PermissionEnum: string
     // Payments
     case CREATE_PAYMENT = 'payments_create';
     case READ_PAYMENT = 'payments_read';
-    case UPDATE_PAYMENT = 'payments_update';
     case DELETE_PAYMENT = 'payments_delete';
 
     // Items

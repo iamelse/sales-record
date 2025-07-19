@@ -13,16 +13,9 @@
     <!-- Header Section -->
     <div class="flex px-6 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Sale Management</h1>
-            <p class="text-gray-600 dark:text-gray-400">Manage sale data</p>
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Payment Management</h1>
+            <p class="text-gray-600 dark:text-gray-400">Manage payment data</p>
         </div>
-        @can(PermissionEnum::CREATE_SALE, $sales)
-        <a href="{{ route('be.sale.create') }}"
-            class="flex items-center gap-2 h-[42px] px-4 py-2.5 rounded-lg border border-blue-500 bg-blue-600 text-white font-medium transition-all hover:bg-blue-700 hover:border-blue-600 focus:ring focus:ring-blue-300 dark:bg-blue-700 dark:border-blue-600 dark:hover:bg-blue-800">
-            <i class="bx bx-plus text-lg"></i>
-            New Sale
-        </a>
-        @endcan
     </div>
 
     <!-- Table Section -->
@@ -39,7 +32,7 @@
                                 x-on:click.prevent="
                                     if (selected.length > 0) {
                                         let params = new URLSearchParams({ codes: selected.join(',') });
-                                        deleteUrl = '{{ route('be.sale.mass.destroy') }}?' + params.toString();
+                                        deleteUrl = '{{ route('be.payment.mass.destroy') }}?' + params.toString();
                                         openSaleMassDeleteModal = true;
                                     }
                                 "
@@ -72,7 +65,7 @@
                         </div>
 
                         <!-- Reset Filter Button -->
-                        <a href="{{ route('be.sale.index') }}"
+                        <a href="{{ route('be.payment.index') }}"
                             class="flex items-center gap-2 h-[42px] px-4 py-2.5 rounded-lg border border-gray-400 bg-gray-100 text-gray-700 font-medium transition-all hover:bg-gray-200 hover:border-gray-500 focus:ring focus:ring-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700">
                             <i class="bx bx-reset text-lg"></i>
                             Reset Filter
@@ -95,7 +88,7 @@
                                     <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Filter Options</h2>
 
                                     <!-- Form -->
-                                    <form method="GET" action="{{ route('be.sale.index') }}">
+                                    <form method="GET" action="{{ route('be.payment.index') }}">
 
                                         <!-- Date Range -->
                                         <div class="mt-4">
@@ -209,30 +202,31 @@
                                         [...document.querySelectorAll('.item-checkbox')].map(cb => cb.value) : []">
                             </th>
                             <th class="w-20 px-4 py-3 font-medium">No.</th>
-                            <th class="px-4 py-3 font-medium">Customer Name</th>
-                            <th class="px-4 py-3 font-medium">Code</th>
+                            <th class="px-4 py-3 font-medium">Payment Code</th>
+                            <th class="px-4 py-3 font-medium">Sale Code</th>
                             <th class="px-4 py-3 font-medium">Total Price</th>
                             <th class="px-4 py-3 font-medium">Paid Amount</th>
                             <th class="px-4 py-3 font-medium">Status</th>
                             <th class="px-4 py-3 font-medium">Created At</th>
                             <th class="px-4 py-3 font-medium">Updated At</th>
                             <th class="px-4 py-3 font-medium text-center">Actions</th>
+
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-800 dark:text-gray-400">
-                        @forelse ($sales as $sale)
+                        @forelse ($payments as $payment)
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
                             <td class="w-10 px-6 py-3">
                                 <input
                                     type="checkbox"
-                                    class="item-checkbox flex h-5 w-5 border-gray-300 cursor-pointer items-center justify-center rounded-md border-[1.25px] transition-all" value="{{ $sale->code }}"
+                                    class="item-checkbox flex h-5 w-5 border-gray-300 cursor-pointer items-center justify-center rounded-md border-[1.25px] transition-all" value="{{ $payment->code }}"
                                     x-model="selected">
                             </td>
                             <td class="w-20 px-4 py-3">{{ $loop->iteration }}</td>
-                            <td class="w-20 px-4 py-3">{{ $sale->customer_name }}</td>
-                            <td class="w-20 px-4 py-3">{{ $sale->code }}</td>
-                            <td class="px-4 py-3">Rp {{ $sale->formatted_total_price }}</td>
-                            <td class="px-4 py-3">Rp {{ $sale->formatted_paid_amount }}</td>
+                            <td class="w-20 px-4 py-3">{{ $payment->code }}</td>
+                            <td class="w-20 px-4 py-3">{{ $payment->sale?->code ?? '[null]' }}</td>
+                            <td class="px-4 py-3">Rp {{ $payment->formatted_total_price }}</td>
+                            <td class="px-4 py-3">Rp {{ $payment->formatted_paid_amount }}</td>
                             <td class="px-4 py-3">
                                 @php
                                     $badgeClasses = [
@@ -241,12 +235,12 @@
                                         'Sudah Dibayar' => 'bg-green-100 text-green-800',
                                     ];
                                 @endphp
-                                <span class="px-2 py-1 rounded-full text-xs font-semibold {{ $badgeClasses[$sale->status] ?? 'bg-gray-100 text-gray-800' }}">
-                                    {{ $sale->status }}
+                                <span class="px-2 py-1 rounded-full text-xs font-semibold {{ $badgeClasses[$payment->sale->status] ?? 'bg-gray-100 text-gray-800' }}">
+                                    {{ $payment->sale->status }}
                                 </span>
                             </td>
-                            <td class="px-4 py-3">{{ $sale->formatted_created_at }}</td>
-                            <td class="px-4 py-3">{{ $sale->formatted_updated_at }}</td>
+                            <td class="px-4 py-3">{{ $payment->formatted_created_at }}</td>
+                            <td class="px-4 py-3">{{ $payment->formatted_updated_at }}</td>
                             <td class="px-4 py-3 text-center relative">
                                 <div x-cloak x-data="{ openDropDown: false }" class="inline-block">
                                     <button @click="openDropDown = !openDropDown"
@@ -256,24 +250,8 @@
                                     <div x-show="openDropDown" @click.outside="openDropDown = false"
                                         class="absolute right-16 top-8 mt-1 w-40 rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-800 dark:bg-gray-900
                                         z-50 overflow-visible">
-                                        @can(PermissionEnum::UPDATE_SALE, $sale)
-                                            @if ($sale->status !== SaleStatus::PAID->value)
-                                                <a href="{{ route('be.payment.create', $sale->code) }}"
-                                                   class="block w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
-                                                    Pay
-                                                </a>
-                                            @endif
-                                        @endcan
-                                        @can(PermissionEnum::UPDATE_SALE, $sale)
-                                            @if ($sale->status === SaleStatus::UNPAID->value)
-                                                <a href="{{ route('be.sale.edit', $sale->code) }}"
-                                                   class="block w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
-                                                    Edit
-                                                </a>
-                                            @endif
-                                        @endcan
-                                        @can(PermissionEnum::READ_SALE, $sale)
-                                                <a href="{{ route('be.sale.show', $sale->code) }}"
+                                        @can(PermissionEnum::READ_PAYMENT, $payment)
+                                                <a href="{{ route('be.payment.show', $payment->code) }}"
                                                    class="block w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
                                                     Detail
                                                 </a>
@@ -281,7 +259,7 @@
                                         <!-- Alpine.js State Wrapper -->
                                         <div x-data="{ openSaleDeleteModal: false }">
                                             <!-- Delete Button -->
-                                            @can(PermissionEnum::DELETE_SALE, $sale)
+                                            @can(PermissionEnum::DELETE_PAYMENT, $payment)
                                             <button @click="openSaleDeleteModal = true" class="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-100 dark:text-red-400 dark:hover:bg-red-800">
                                                 Delete
                                             </button>
@@ -303,7 +281,7 @@
                                                         </button>
 
                                                         <!-- Delete Form -->
-                                                        <form action="{{ route('be.sale.destroy', $sale->code) }}" method="POST">
+                                                        <form action="{{ route('be.payment.destroy', $payment->code) }}" method="POST">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
@@ -328,11 +306,11 @@
                 </table>
             </div>
 
-            <div class="{{ !$sales->previousPageUrl() && !$sales->nextPageUrl() ? '' : 'border-t border-gray-200 px-6 py-4 dark:border-gray-800' }}">
+            <div class="{{ !$payments->previousPageUrl() && !$payments->nextPageUrl() ? '' : 'border-t border-gray-200 px-6 py-4 dark:border-gray-800' }}">
                 <div class="flex items-center justify-between">
                     <!-- Previous Button -->
-                    @if ($sales->previousPageUrl())
-                        <a href="{{ $sales->appends(request()->query())->previousPageUrl() }}" class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 shadow-sm hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition">
+                    @if ($payments->previousPageUrl())
+                        <a href="{{ $payments->appends(request()->query())->previousPageUrl() }}" class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 shadow-sm hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition">
                             <span class="hidden sm:inline">Previous</span>
                         </a>
                     @else
@@ -341,12 +319,12 @@
 
                     <!-- Pagination Links - Always Centered -->
                     <div class="flex justify-center flex-1">
-                        {{ $sales->appends(request()->query())->links() }}
+                        {{ $payments->appends(request()->query())->links() }}
                     </div>
 
                     <!-- Next Button -->
-                    @if ($sales->nextPageUrl())
-                        <a href="{{ $sales->appends(request()->query())->nextPageUrl() }}" class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 shadow-sm hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition">
+                    @if ($payments->nextPageUrl())
+                        <a href="{{ $payments->appends(request()->query())->nextPageUrl() }}" class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 shadow-sm hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition">
                             <span class="hidden sm:inline">Next</span>
                         </a>
                     @else

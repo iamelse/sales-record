@@ -17,13 +17,16 @@ class PaymentSeeder extends Seeder
         $sales = Sale::all();
 
         foreach ($sales->take(3) as $index => $sale) {
+            $paymentCount = Payment::count() + 1; // Use Payment count instead of Sale
+            $paymentCode = 'PYM-' . now()->format('Ymd') . '-' . str_pad($paymentCount, 3, '0', STR_PAD_LEFT);
+
             Payment::create([
-                'code' => 'PYM-' . str_pad($index + 1, 4, '0', STR_PAD_LEFT),
+                'code' => $paymentCode,
                 'sale_id' => $sale->id,
                 'amount' => $sale->total_price,
             ]);
 
-            // Update status di sale
+            // Update sale status
             $sale->update([
                 'status' => 'Sudah Dibayar',
             ]);
