@@ -62,7 +62,7 @@ class ItemController extends Controller
         try {
             $imagePath = $this->_handleImageUpload($request, null);
 
-            $code = generateUniqueItemCode(3, 6);
+            $code = $request->filled('code') ? $request->code : generateUniqueItemCode(3, 6);
 
             Item::create([
                 'name' => $request->name,
@@ -106,6 +106,7 @@ class ItemController extends Controller
                 'name' => $request->name,
                 'price' => $request->price,
                 'image' => $imagePath,
+                'code' => $request->filled('code') ? $request->code : $item->code,
             ]);
 
             return redirect()->route('be.item.index')

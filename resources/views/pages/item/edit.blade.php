@@ -18,6 +18,22 @@
                         @csrf
                         @method('PUT')
 
+                        <!-- Code -->
+                        <div class="mt-4">
+                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                Code
+                            </label>
+                            <input
+                                type="text"
+                                name="code"
+                                value="{{ old('code', $item->code) }}"
+                                placeholder="Enter an unique item code (e.g. ITEM-FHZ-873162)"
+                                class="h-11 w-full text-sm mt-1 px-4 py-2.5 border @error('code') border-red-500 @else border-gray-300 @enderror dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300">
+                            @error('code')
+                            <span class="text-xs mt-1 font-medium text-red-500">* {{ $message }}</span>
+                            @enderror
+                        </div>
+
                         <!-- Name -->
                         <div class="mt-4">
                             <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
