@@ -52,66 +52,97 @@
    <nav>
       <!-- Menu Group -->
       <div>
-         @php
-            use App\Enums\PermissionEnum;
+          @php
+              use App\Enums\PermissionEnum;
+              use Illuminate\Support\Facades\Auth;
 
-            $menus = collect([
-                [
-                    'title' => 'Main',
-                    'order' => 1,
-                    'children' => [
-                        [
-                            'order' => 1,
-                            'active' => 'be.dashboard',
-                            'route' => 'be.dashboard.index',
-                            'icon' => 'bx-line-chart',
-                            'label' => 'Dashboard',
-                            'permission' => PermissionEnum::READ_DASHBOARD
-                        ],
-                    ]
-                ],
-                [
-                    'title' => 'Settings',
-                    'order' => 99,
-                    'children' => [
-                        [
-                            'order' => 1,
-                            'active' => 'be.role.and.permission',
-                            'route' => 'be.role.and.permission.index',
-                            'icon' => 'bx-lock-open',
-                            'label' => 'Role & Permissions',
-                            'permission' => PermissionEnum::READ_ROLE
-                        ],
-                        [
-                            'order' => 2,
-                            'active' => [
-                                'be.user.index',
-                                'be.user.create',
-                                'be.user.edit'
+              $menus = collect([
+                    [
+                        'title' => 'Main',
+                        'order' => 1,
+                        'children' => [
+                            [
+                                'order' => 1,
+                                'active' => 'be.dashboard',
+                                'route' => 'be.dashboard.index',
+                                'icon' => 'bx-line-chart',
+                                'label' => 'Dashboard',
+                                'permission' => PermissionEnum::READ_DASHBOARD
                             ],
-                            'exact' => true,
-                            'route' => 'be.user.index',
-                            'icon' => 'bx bx-user',
-                            'label' => 'Users',
-                            'permission' => PermissionEnum::READ_USER
-                        ],
+                            [
+                                'order' => 2,
+                                'active' => 'be.sale',
+                                'route' => 'be.sale.index',
+                                'icon' => 'bx-wallet',
+                                'label' => 'Sales',
+                                'permission' => PermissionEnum::READ_SALE
+                            ],
+                            [
+                                'order' => 3,
+                                'active' => 'be.payment',
+                                'route' => 'be.payment.index',
+                                'icon' => 'bx-money',
+                                'label' => 'Payments',
+                                'permission' => PermissionEnum::READ_PAYMENT
+                            ],
+                        ]
+                    ],
+                    [
+                        'title' => 'Master Data',
+                        'order' => 2,
+                        'children' => [
+                            [
+                                'order' => 1,
+                                'active' => 'be.item',
+                                'route' => 'be.item.index',
+                                'icon' => 'bx-package',
+                                'label' => 'Items',
+                                'permission' => PermissionEnum::READ_ITEM
+                            ],
+                            [
+                                'order' => 2,
+                                'active' => [
+                                    'be.user.index',
+                                    'be.user.create',
+                                    'be.user.edit'
+                                ],
+                                'exact' => true,
+                                'route' => 'be.user.index',
+                                'icon' => 'bx bx-user',
+                                'label' => 'Users',
+                                'permission' => PermissionEnum::READ_USER
+                            ],
+                        ]
+                    ],
+                    [
+                        'title' => 'Settings',
+                        'order' => 3,
+                        'children' => [
+                            [
+                                'order' => 1,
+                                'active' => 'be.role.and.permission',
+                                'route' => 'be.role.and.permission.index',
+                                'icon' => 'bx-lock-open',
+                                'label' => 'Role & Permissions',
+                                'permission' => PermissionEnum::READ_ROLE
+                            ],
+                        ]
                     ]
-                ]
-            ]);
+                ]);
 
-            $userPermissions = Auth::user()->permissions;
+              $userPermissions = Auth::user()->permissions;
 
-            // Filter and sort menus based on user permissions
-            $filteredMenus = $menus->map(function ($menu) use ($userPermissions) {
-               $menu['children'] = collect($menu['children'])
-                  ->filter(fn($child) => Auth::user()->can($child['permission'], $userPermissions))
-                  ->sortBy('order'); // Sort children
-               return $menu;
-            })->filter(fn($menu) => $menu['children']->isNotEmpty()) // Remove empty parents
-            ->sortBy('order'); // Sort parents
-         @endphp
+              // Filter dan urutkan menu berdasarkan permission dan urutan
+              $filteredMenus = $menus->map(function ($menu) use ($userPermissions) {
+                  $menu['children'] = collect($menu['children'])
+                      ->filter(fn($child) => Auth::user()->can($child['permission'], $userPermissions))
+                      ->sortBy('order');
+                  return $menu;
+              })->filter(fn($menu) => $menu['children']->isNotEmpty())
+              ->sortBy('order');
+          @endphp
 
-         <div class="mt-5 lg:mt-0">
+          <div class="mt-5 lg:mt-0">
             @foreach ($filteredMenus as $menu)
                <h3 class="mb-4 text-xs uppercase leading-[20px] text-gray-400">
                   {{ $menu['title'] }}

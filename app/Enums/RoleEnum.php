@@ -6,7 +6,7 @@ enum RoleEnum: string
 {
     case ADMIN = 'Admin';
     case CASHIER = 'Cashier';
-    case MANAGER = 'Manager'; // Tambahan (opsional)
+    case MANAGER = 'Manager';
 
     public function permissions(): array
     {
@@ -28,19 +28,19 @@ enum RoleEnum: string
                 PermissionEnum::DELETE_ROLE,
                 PermissionEnum::UPDATE_ROLE_PERMISSION,
 
-                // Penjualan
-                PermissionEnum::CREATE_PENJUALAN,
-                PermissionEnum::READ_PENJUALAN,
-                PermissionEnum::UPDATE_PENJUALAN,
-                PermissionEnum::DELETE_PENJUALAN,
+                // Sales
+                PermissionEnum::CREATE_SALE,
+                PermissionEnum::READ_SALE,
+                PermissionEnum::UPDATE_SALE,
+                PermissionEnum::DELETE_SALE,
 
-                // Pembayaran
-                PermissionEnum::CREATE_PEMBAYARAN,
-                PermissionEnum::READ_PEMBAYARAN,
-                PermissionEnum::UPDATE_PEMBAYARAN,
-                PermissionEnum::DELETE_PEMBAYARAN,
+                // Payments
+                PermissionEnum::CREATE_PAYMENT,
+                PermissionEnum::READ_PAYMENT,
+                PermissionEnum::UPDATE_PAYMENT,
+                PermissionEnum::DELETE_PAYMENT,
 
-                // Item
+                // Items
                 PermissionEnum::CREATE_ITEM,
                 PermissionEnum::READ_ITEM,
                 PermissionEnum::UPDATE_ITEM,
@@ -50,23 +50,26 @@ enum RoleEnum: string
             self::CASHIER => [
                 PermissionEnum::READ_DASHBOARD,
 
-                PermissionEnum::CREATE_PENJUALAN,
-                PermissionEnum::READ_PENJUALAN,
-                PermissionEnum::UPDATE_PENJUALAN,
-                PermissionEnum::DELETE_PENJUALAN,
+                // Sales
+                PermissionEnum::CREATE_SALE,
+                PermissionEnum::READ_SALE,
+                PermissionEnum::UPDATE_SALE,
+                PermissionEnum::DELETE_SALE,
 
-                PermissionEnum::CREATE_PEMBAYARAN,
-                PermissionEnum::READ_PEMBAYARAN,
-                PermissionEnum::UPDATE_PEMBAYARAN,
-                PermissionEnum::DELETE_PEMBAYARAN,
+                // Payments
+                PermissionEnum::CREATE_PAYMENT,
+                PermissionEnum::READ_PAYMENT,
+                PermissionEnum::UPDATE_PAYMENT,
+                PermissionEnum::DELETE_PAYMENT,
 
+                // Items (Read-only)
                 PermissionEnum::READ_ITEM,
             ],
 
-            self::MANAGER => [ // Tambahan opsional untuk read-only user
+            self::MANAGER => [
                 PermissionEnum::READ_DASHBOARD,
-                PermissionEnum::READ_PENJUALAN,
-                PermissionEnum::READ_PEMBAYARAN,
+                PermissionEnum::READ_SALE,
+                PermissionEnum::READ_PAYMENT,
                 PermissionEnum::READ_ITEM,
             ],
         };

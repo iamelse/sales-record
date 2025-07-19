@@ -12,14 +12,14 @@
     <!-- Header Section -->
     <div class="flex px-6 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Role Management</h1>
-            <p class="text-gray-600 dark:text-gray-400">Manage user roles and permissions</p>
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Item Management</h1>
+            <p class="text-gray-600 dark:text-gray-400">Manage item data</p>
         </div>
-        @can(PermissionEnum::CREATE_ROLE, $roles)
-        <a href="{{ route('be.role.and.permission.create') }}"
+        @can(PermissionEnum::CREATE_ITEM, $items)
+        <a href="{{ route('be.item.create') }}"
             class="flex items-center gap-2 h-[42px] px-4 py-2.5 rounded-lg border border-blue-500 bg-blue-600 text-white font-medium transition-all hover:bg-blue-700 hover:border-blue-600 focus:ring focus:ring-blue-300 dark:bg-blue-700 dark:border-blue-600 dark:hover:bg-blue-800">
-            <i class="bx bx-plus text-lg"></i>
-            New Role
+            <i class='bx bx-filter-alt text-lg' ></i>
+            New Item
         </a>
         @endcan
     </div>
@@ -32,14 +32,14 @@
                 <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
                     <div class="relative flex items-center gap-2">
                         <!-- Delete Selected Button -->
-                        <div x-data="{ openRoleMassDeleteModal: false, deleteUrl: '' }">
+                        <div x-data="{ openItemMassDeleteModal: false, deleteUrl: '' }">
                             <!-- Delete Selected Button -->
                             <a href="#"
                                 x-on:click.prevent="
                                     if (selected.length > 0) {
-                                        let params = new URLSearchParams({ slugs: selected.join(',') });
-                                        deleteUrl = '{{ route('be.role.and.permission.mass.destroy') }}?' + params.toString();
-                                        openRoleMassDeleteModal = true;
+                                        let params = new URLSearchParams({ codes: selected.join(',') });
+                                        deleteUrl = '{{ route('be.item.mass.destroy') }}?' + params.toString();
+                                        openItemMassDeleteModal = true;
                                     }
                                 "
                                 :class="selected.length === 0 ? 'hidden' : ''"
@@ -49,7 +49,7 @@
                             </a>
 
                             <!-- Delete Confirmation Modal -->
-                            <div x-show="openRoleMassDeleteModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                            <div x-show="openItemMassDeleteModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-[400px]">
                                     <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Confirm Deletion</h2>
                                     <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
@@ -57,7 +57,7 @@
                                     </p>
 
                                     <div class="mt-4 flex justify-end gap-3">
-                                        <button @click="openRoleMassDeleteModal = false"
+                                        <button @click="openItemMassDeleteModal = false"
                                             class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
                                             Cancel
                                         </button>
@@ -71,7 +71,7 @@
                         </div>
 
                         <!-- Reset Filter Button -->
-                        <a href="{{ route('be.role.and.permission.index') }}"
+                        <a href="{{ route('be.item.index') }}"
                             class="flex items-center gap-2 h-[42px] px-4 py-2.5 rounded-lg border border-gray-400 bg-gray-100 text-gray-700 font-medium transition-all hover:bg-gray-200 hover:border-gray-500 focus:ring focus:ring-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700">
                             <i class="bx bx-reset text-lg"></i>
                             Reset Filter
@@ -82,7 +82,7 @@
                             <!-- Filter Button -->
                             <button @click.prevent="open = true"
                                 class="flex items-center gap-2 h-[42px] px-4 py-2.5 rounded-lg border border-purple-500 bg-purple-600 text-white font-medium transition-all hover:bg-purple-700 hover:border-purple-600 focus:ring focus:ring-purple-300 dark:bg-purple-700 dark:border-purple-600 dark:hover:bg-purple-800">
-                                <i class='bx bx-filter-alt text-lg' ></i>
+                                <i class="bx bx-filter text-lg"></i>
                                 Filter
                             </button>
 
@@ -94,10 +94,8 @@
                                     <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Filter Options</h2>
 
                                     <!-- Form -->
-                                    <form method="GET" action="{{ route('be.role.and.permission.index') }}">
-                                        @foreach(request()->except(['filter', 'sort', 'limit']) as $key => $value)
-                                            <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-                                        @endforeach
+                                    <form method="GET" action="{{ route('be.item.index') }}">
+
                                         <!-- Limit Selection -->
                                         <div class="mt-4">
                                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -186,30 +184,38 @@
                                 <input
                                     type="checkbox"
                                     class="flex h-5 w-5 border-gray-300 cursor-pointer items-center justify-center rounded-md border-[1.25px] transition-all"
-                                    x-bind:checked="selected.length > 0 && selected.length === document.querySelectorAll('.role-checkbox').length"
+                                    x-bind:checked="selected.length > 0 && selected.length === document.querySelectorAll('.item-checkbox').length"
                                     x-on:change="selected = $event.target.checked ?
-                                        [...document.querySelectorAll('.role-checkbox')].map(cb => cb.value) : []">
+                                        [...document.querySelectorAll('.item-checkbox')].map(cb => cb.value) : []">
                             </th>
                             <th class="w-20 px-4 py-3 font-medium">No.</th>
+                            <th class="px-4 py-3 font-medium">Image</th>
+                            <th class="px-4 py-3 font-medium">Code</th>
                             <th class="px-4 py-3 font-medium">Name</th>
+                            <th class="px-4 py-3 font-medium">Price</th>
                             <th class="px-4 py-3 font-medium">Created At</th>
                             <th class="px-4 py-3 font-medium">Updated At</th>
                             <th class="px-4 py-3 font-medium text-center">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-800 dark:text-gray-400">
-                        @forelse ($roles as $role)
+                        @forelse ($items as $item)
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition">
                             <td class="w-10 px-6 py-3">
                                 <input
                                     type="checkbox"
-                                    class="role-checkbox flex h-5 w-5 border-gray-300 cursor-pointer items-center justify-center rounded-md border-[1.25px] transition-all" value="{{ $role->slug }}"
+                                    class="item-checkbox flex h-5 w-5 border-gray-300 cursor-pointer items-center justify-center rounded-md border-[1.25px] transition-all" value="{{ $item->code }}"
                                     x-model="selected">
                             </td>
                             <td class="w-20 px-4 py-3">{{ $loop->iteration }}</td>
-                            <td class="px-4 py-3">{{ $role->name }}</td>
-                            <td class="px-4 py-3">{{ $role->formatted_created_at }}</td>
-                            <td class="px-4 py-3">{{ $role->formatted_updated_at }}</td>
+                            <td class="px-4 py-3">
+                                <img src="{{ getItemImagePath($item) }}" alt="{{ $item->name }}" class="w-12 h-12 rounded-lg" />
+                            </td>
+                            <td class="w-20 px-4 py-3">{{ $item->code }}</td>
+                            <td class="px-4 py-3">{{ $item->name }}</td>
+                            <td class="px-4 py-3">Rp {{ $item->formatted_price }}</td>
+                            <td class="px-4 py-3">{{ $item->formatted_created_at }}</td>
+                            <td class="px-4 py-3">{{ $item->formatted_updated_at }}</td>
                             <td class="px-4 py-3 text-center relative">
                                 <div x-cloak x-data="{ openDropDown: false }" class="inline-block">
                                     <button @click="openDropDown = !openDropDown"
@@ -219,23 +225,22 @@
                                     <div x-show="openDropDown" @click.outside="openDropDown = false"
                                         class="absolute right-16 top-8 mt-1 w-40 rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-800 dark:bg-gray-900
                                         z-50 overflow-visible">
-                                        <a href="{{ route('be.role.and.permission.edit', $role->slug) }}" class="block w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
+                                        @can(PermissionEnum::UPDATE_ITEM, $item)
+                                        <a href="{{ route('be.item.edit', $item->code) }}" class="block w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
                                             Edit
                                         </a>
-                                        <a href="{{ route('be.role.and.permission.edit.permissions', $role->slug) }}" class="block w-full px-4 py-2 text-left text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
-                                            Permission
-                                        </a>
+                                        @endcan
                                         <!-- Alpine.js State Wrapper -->
-                                        <div x-data="{ openRoleDeleteModal: false }">
+                                        <div x-data="{ openItemDeleteModal: false }">
                                             <!-- Delete Button -->
-                                            @can(PermissionEnum::DELETE_ROLE, $roles)
-                                            <button @click="openRoleDeleteModal = true" class="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-100 dark:text-red-400 dark:hover:bg-red-800">
+                                            @can(PermissionEnum::DELETE_ITEM, $item)
+                                            <button @click="openItemDeleteModal = true" class="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-100 dark:text-red-400 dark:hover:bg-red-800">
                                                 Delete
                                             </button>
                                             @endcan
 
                                             <!-- Confirmation Modal -->
-                                            <div x-show="openRoleDeleteModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                                            <div x-show="openItemDeleteModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                                                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-[400px]">
                                                     <h2 class="text-lg text-start font-semibold text-gray-800 dark:text-gray-200">Confirm Deletion</h2>
                                                     <p class="text-sm text-start text-gray-600 dark:text-gray-400 mt-2">
@@ -245,12 +250,12 @@
                                                     <!-- Centered Buttons -->
                                                     <div class="flex justify-end space-x-3 mt-3">
                                                         <!-- Cancel Button -->
-                                                        <button @click="openRoleDeleteModal = false" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
+                                                        <button @click="openItemDeleteModal = false" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
                                                             Cancel
                                                         </button>
 
                                                         <!-- Delete Form -->
-                                                        <form action="{{ route('be.role.and.permission.destroy', $role->slug) }}" method="POST">
+                                                        <form action="{{ route('be.item.destroy', $item->code) }}" method="POST">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
@@ -275,11 +280,11 @@
                 </table>
             </div>
 
-            <div class="{{ !$roles->previousPageUrl() && !$roles->nextPageUrl() ? '' : 'border-t border-gray-200 px-6 py-4 dark:border-gray-800' }}">
+            <div class="{{ !$items->previousPageUrl() && !$items->nextPageUrl() ? '' : 'border-t border-gray-200 px-6 py-4 dark:border-gray-800' }}">
                 <div class="flex items-center justify-between">
                     <!-- Previous Button -->
-                    @if ($roles->previousPageUrl())
-                        <a href="{{ $roles->previousPageUrl() }}" class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 shadow-sm hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition">
+                    @if ($items->previousPageUrl())
+                        <a href="{{ $items->appends(request()->query())->previousPageUrl() }}" class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 shadow-sm hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition">
                             <span class="hidden sm:inline">Previous</span>
                         </a>
                     @else
@@ -288,12 +293,12 @@
 
                     <!-- Pagination Links - Always Centered -->
                     <div class="flex justify-center flex-1">
-                        {{ $roles->appends(request()->query())->links() }}
+                        {{ $items->appends(request()->query())->links() }}
                     </div>
 
                     <!-- Next Button -->
-                    @if ($roles->nextPageUrl())
-                        <a href="{{ $roles->nextPageUrl() }}" class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 shadow-sm hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition">
+                    @if ($items->nextPageUrl())
+                        <a href="{{ $items->appends(request()->query())->nextPageUrl() }}" class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 shadow-sm hover:bg-gray-100 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition">
                             <span class="hidden sm:inline">Next</span>
                         </a>
                     @else
