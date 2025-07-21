@@ -1,66 +1,198 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Aplikasi Pencatatan Penjualan - Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi pencatatan penjualan berbasis web yang dibuat menggunakan Laravel. Aplikasi ini mencakup berbagai fitur seperti manajemen penjualan, pembayaran, dan master data untuk pengguna dan item.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📊 Fitur Utama
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 1. Dashboard
+Menampilkan ringkasan data penjualan dalam bentuk widget dan chart interaktif.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+#### 🔍 Fitur Dashboard:
+- Filter **date range** yang mempengaruhi data widget dan chart.
+- Widget:
+    - Jumlah Transaksi
+    - Jumlah Penjualan (Rupiah)
+    - Jumlah Item Terjual (Qty)
+- Chart:
+    - Penjualan per Bulan (Rupiah)
+    - Penjualan per Item (Qty)
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 2. Modul Penjualan
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+#### 🧾 List Penjualan
+- Tabel list penjualan terbaru berada di paling atas.
+- Filter tanggal penjualan yang langsung memfilter isi tabel.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+#### ➕ Tambah Penjualan
+- Kode penjualan **otomatis digenerate**.
+- Satu penjualan dapat terdiri dari **lebih dari satu item**.
+- Setiap baris terdiri dari: `Qty`, `Harga`, dan `Total Harga`.
+- Penjualan baru memiliki status **"Belum Dibayar"**.
 
-## Laravel Sponsors
+#### 🔍 Lihat Detail Penjualan
+- Melihat detail dari penjualan yang telah dibuat.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+#### ✏️ Edit Penjualan
+- Mengubah data penjualan dan item terkait.
+- **Tidak bisa di-edit jika status penjualan adalah "Sudah Dibayar"**.
 
-### Premium Partners
+#### ❌ Delete Penjualan
+- **Tidak bisa dihapus jika status penjualan adalah "Sudah Dibayar"**.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+---
 
-## Contributing
+### 3. Modul Pembayaran
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+#### 🧾 List Pembayaran
+- Tabel list pembayaran terbaru berada di paling atas.
+- Filter tanggal pembayaran yang langsung memfilter isi tabel.
 
-## Code of Conduct
+#### ➕ Tambah Pembayaran
+- Kode pembayaran **otomatis digenerate**.
+- Pembayaran ditautkan ke satu penjualan.
+- Setelah submit, status penjualan berubah menjadi **"Sudah Dibayar"**.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+#### 🔍 Lihat Detail Pembayaran
+- Melihat detail dari pembayaran yang telah dilakukan.
 
-## Security Vulnerabilities
+#### ✏️ Edit Pembayaran
+- Mengubah informasi pembayaran.
+- **Tidak bisa mengubah penjualan yang dibayar**.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+#### ❌ Delete Pembayaran
+- Jika dihapus, status penjualan akan berubah menjadi **"Belum Dibayar"**.
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 4. Modul Master
+
+#### 👤 User
+- **List User**.
+- **Tambah User**: Nama, Email, Password.
+- **Edit User**: Nama, Email, Password.
+- **Delete User**.
+- 🔒 Nilai Tambahan:
+    - Role dan Permission menggunakan **Laravel Spatie Permission**.
+
+#### 📦 Item
+- **List Item**.
+- **Tambah Item**: Kode, Nama, Gambar (upload), Harga.
+- **Edit Item**: Kode, Nama, Gambar (upload), Harga.
+- **Delete Item**.
+
+---
+
+## 🚀 Teknologi yang Digunakan
+- Laravel 12 (Backend Framework)
+- Laravel Spatie Permission (Role & Permission)
+- Chart.js (untuk visualisasi data)
+- Tailwind (untuk styling UI)
+
+---
+
+## 🛠 Instalasi
+
+1. Clone repository:
+   ```bash
+   git clone https://github.com/username/nama-project.git
+   cd nama-project
+   ```
+
+2. Install dependensi:
+    ```bash
+   composer install
+   npm install && npm run dev
+   ```
+
+3. Setup file environment dan database:
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+   ```bash
+   DB_CONNECTION=mysql
+   DB_HOST=localhost
+   DB_PORT=3306
+   DB_DATABASE=your-db
+   DB_USERNAME=your-db-username
+   DB_PASSWORD=your-db-password
+   ```
+   
+4. Jalankan migrasi dan seeder
+   ```bash
+   php artisan migrate --seed
+   ```
+   
+5. Jalankan aplikasi
+   ```bash 
+   php artisan serve
+   ```
+
+## 🔐 Role & Permission
+
+Aplikasi ini menggunakan sistem Role & Permission yang didefinisikan melalui App\Enums\RoleEnum dan PermissionEnum. Setiap role memiliki hak akses tertentu terhadap fitur-fitur aplikasi.
+
+### 🎭 Daftar Role
+1. Admin
+
+Memiliki akses penuh ke seluruh fitur dan manajemen data.
+
+Permission:
+
+    Dashboard (baca)
+
+    User (buat, lihat, ubah, hapus)
+
+    Role & Permission (buat, lihat, ubah, hapus, atur hak akses)
+
+    Penjualan (buat, lihat, ubah, hapus)
+
+    Pembayaran (buat, lihat, hapus)
+
+    Item (buat, lihat, ubah, hapus)
+
+2. Cashier
+
+Bertanggung jawab atas proses transaksi penjualan dan pembayaran.
+
+Permission:
+
+    Dashboard (baca)
+
+    Penjualan (buat, lihat, ubah, hapus)
+
+    Pembayaran (buat, lihat, hapus)
+
+    Item (hanya baca)
+
+3. Manager
+
+Memiliki akses monitoring terhadap aktivitas penjualan, pembayaran, dan produk.
+
+Permission:
+
+    Dashboard (baca)
+
+    Penjualan (baca)
+
+    Pembayaran (baca)
+
+    Item (baca)
+
+## 👤 Akun Login Default
+
+Berikut adalah akun pengguna yang bisa digunakan untuk login awal pada sistem:
+```bash
+Role	Email	Password
+Admin	admin@example.com	password
+Cashier	cashier@example.com	password
+Manager	manager@example.com	password
+```
+
+## ✅ Catatan Tambahan
+* Konfigurasi database di .env sebelum menjalankan migrasi.
+* Alasan saya tidak menggunakan DataTables bukan karena tidak bisa, melainkan karena integrasinya dengan Tailwind CSS masih membutuhkan styling manual, yang saat ini belum saya prioritaskan.

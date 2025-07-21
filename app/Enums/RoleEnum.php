@@ -37,7 +37,7 @@ enum RoleEnum: string
                 // Payments
                 PermissionEnum::CREATE_PAYMENT,
                 PermissionEnum::READ_PAYMENT,
-                PermissionEnum::UPDATE_PAYMENT,
+                // PermissionEnum::UPDATE_PAYMENT,
                 PermissionEnum::DELETE_PAYMENT,
 
                 // Items
@@ -59,7 +59,7 @@ enum RoleEnum: string
                 // Payments
                 PermissionEnum::CREATE_PAYMENT,
                 PermissionEnum::READ_PAYMENT,
-                PermissionEnum::UPDATE_PAYMENT,
+                // PermissionEnum::UPDATE_PAYMENT,
                 PermissionEnum::DELETE_PAYMENT,
 
                 // Items (Read-only)
