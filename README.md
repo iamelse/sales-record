@@ -98,8 +98,8 @@ Menampilkan ringkasan data penjualan dalam bentuk widget dan chart interaktif.
 
 1. Clone repository:
    ```bash
-   git clone https://github.com/username/nama-project.git
-   cd nama-project
+   git clone https://github.com/iamelse/sales-record.git
+   cd sales-record
    ```
 
 2. Install dependensi:
